@@ -1,11 +1,9 @@
 /* ══════════════════ TIMER ══════════════════ */
 
-const CIRC=125.66; 
-// longueur totale du cercle (périmètre du timer SVG)
+const CIRC=125.66; // longueur totale du cercle (périmètre du timer SVG)
 
 function startTimer(){
-  stopTimer(); 
-  // stop ancien timer si existe
+  stopTimer();  // stop ancien timer si existe
 
   if(CFG.timerSec===0){
     document.getElementById('timer-wrap').classList.add('timer-disabled');

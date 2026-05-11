@@ -1,52 +1,127 @@
 /* ══════════════════ BOARD DATA INIT ══════════════════ */
-let _bonusCount = 4, _trapCount = 4;
 
+let _bonusCount = 4, _trapCount = 4; 
+
+// initialise toute la grille du jeu
 function initBoardData(bonusCount, trapCount){
-  _bonusCount = bonusCount; _trapCount = trapCount;
-  bonusCells=new Set(); trapCells=new Set(); revealedCells=new Set();
 
-  for(let r=0;r<SIZE;r++){
-    board[r]=[];
-    for(let c=0;c<SIZE;c++){
-      board[r][c]={player:0,owner:0,unit:null,bonus:false,trap:false,startZone:0,bonusBuff:false,defending:false};
+  _bonusCount = bonusCount; 
+  _trapCount = trapCount; 
+
+  bonusCells = new Set(); 
+  trapCells = new Set(); 
+  revealedCells = new Set(); 
+
+  // création du plateau vide
+  for(let r=0; r<SIZE; r++){
+
+    board[r] = []; 
+    // crée une ligne
+
+    for(let c=0; c<SIZE; c++){
+
+      board[r][c] = {
+        player: 0,        // aucun joueur
+        owner: 0,         // pas de contrôle
+        unit: null,       // pas d’unité
+        bonus: false,     // pas de bonus
+        trap: false,      // pas de piège
+        startZone: 0,     // zone de départ
+        bonusBuff: false, // bonus actif combat
+        defending: false  // mode défense
+      };
     }
   }
 
-  /* P1 : 2 premières lignes complètes (haut) */
-  for(let r=0;r<2;r++)
-    for(let c=0;c<SIZE;c++)
-      board[r][c].startZone=1;
 
-  /* P2 : 2 dernières lignes complètes (bas) */
-  for(let r=SIZE-2;r<SIZE;r++)
-    for(let c=0;c<SIZE;c++)
-      board[r][c].startZone=2;
+  /* zone de départ joueur 1 */
+  for(let r=0; r<2; r++)       // 2 premières lignes
+    for(let c=0; c<SIZE; c++)
+      board[r][c].startZone = 1;
 
-  placeSpecials(bonusCount, trapCount);
+
+  /* zone de départ joueur 2 */
+  for(let r=SIZE-2; r<SIZE; r++) // 2 dernières lignes
+    for(let c=0; c<SIZE; c++)
+      board[r][c].startZone = 2;
+
+
+  placeSpecials(bonusCount, trapCount); 
+  // place les bonus et pièges
 }
+
+/* ══════════════════ PLACEMENT BONUS / TRAPS ══════════════════ */
 
 function placeSpecials(bonusCount, trapCount){
-  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){board[r][c].bonus=false;board[r][c].trap=false;}
-  bonusCells=new Set(); trapCells=new Set();
-  const midMin=2, midMax=SIZE-3;
-  const placed=new Set();
 
+  // reset toutes les cases spéciales
+  for(let r=0; r<SIZE; r++)
+    for(let c=0; c<SIZE; c++){
+      board[r][c].bonus = false;
+      board[r][c].trap = false;
+    }
+
+  bonusCells = new Set(); // reset bonus
+  trapCells = new Set();   // reset pièges
+
+  const midMin = 2; // zone centrale min
+  const midMax = SIZE - 3; // zone centrale max
+
+  const placed = new Set(); // évite doublons
+
+
+  // génère une case centrale aléatoire valide
   function rndMid(){
-    let r,c,k,tries=0;
+
+    let r, c, k, tries = 0;
+
     do{
-      r=midMin+Math.floor(Math.random()*(midMax-midMin+1));
-      c=midMin+Math.floor(Math.random()*(midMax-midMin+1));
-      k=`${r},${c}`; tries++;
-    }while((placed.has(k)||board[r][c].startZone||board[r][c].unit)&&tries<200);
-    placed.add(k); return[r,c,k];
+      r = midMin + Math.floor(Math.random()*(midMax-midMin+1));
+      c = midMin + Math.floor(Math.random()*(midMax-midMin+1));
+      k = `${r},${c}`; // clé case
+      tries++;
+
+    } while(
+      (placed.has(k) ||               // déjà utilisé
+       board[r][c].startZone ||       // zone de départ
+       board[r][c].unit) &&           // occupée
+      tries < 200
+    );
+
+    placed.add(k); // marque case utilisée
+
+    return [r,c,k]; // retourne position
   }
 
-  for(let i=0;i<bonusCount;i++){const[r,c,k]=rndMid();board[r][c].bonus=true;bonusCells.add(k);}
-  for(let i=0;i<trapCount;i++){const[r,c,k]=rndMid();board[r][c].trap=true;trapCells.add(k);}
+
+  // place les bonus
+  for(let i=0; i<bonusCount; i++){
+
+    const [r,c,k] = rndMid();
+
+    board[r][c].bonus = true; // active bonus
+    bonusCells.add(k);        // enregistre
+  }
+
+
+  // place les pièges
+  for(let i=0; i<trapCount; i++){
+
+    const [r,c,k] = rndMid();
+
+    board[r][c].trap = true; // active piège
+    trapCells.add(k);        // enregistre
+  }
 }
 
+/* ══════════════════ REFRESH SPECIALS ══════════════════ */
+// remet aléatoirement les bonus et pièges
+
 function reshuffleSpecials(){
-  placeSpecials(_bonusCount, _trapCount);
-  revealedCells = new Set();
-  addLog('🌀 Les cases spéciales se sont déplacées…', 'info');
+
+  placeSpecials(_bonusCount, _trapCount); // recrée les positions
+
+  revealedCells = new Set();  // reset des cases révélées
+
+  addLog('🌀 Les cases spéciales se sont déplacées…', 'info'); 
 }

@@ -1,25 +1,45 @@
 /* ══════════════════ LOG ══════════════════ */
 
-// Ajoute un message en haut du journal de jeu
-function addLog(msg, type = 'info') {
-  const el = document.getElementById('log');
-  const div = document.createElement('div');
-  div.className = `log-entry ${type}`;  // type définit la couleur : 'info', 'warn', 'capture'...
-  div.textContent = msg;
-  el.prepend(div); // Plus récent en haut
+// Fonction qui ajoute un message dans le journal du jeu
+
+function addLog(msg, type = 'info') { 
+  // msg = texte du message
+  // type = style (info, warn, capture, etc.)
+
+  const el = document.getElementById('log');   // récupère la zone HTML du log
+
+  const div = document.createElement('div');  // crée une nouvelle ligne (div)
+
+  div.className = `log-entry ${type}`;   // applique une classe CSS selon le type (couleur différente)
+
+  div.textContent = msg;  // met le texte du message dans la div
+
+  el.prepend(div);  // ajoute le message en haut du journal
 }
+
 
 /* ══════════════════ RULES PREVIEWS ══════════════════ */
 
-// Injecte les SVG des unités dans la page des règles
+// Fonction qui affiche les unités dans la page des règles
 function fillRulesPreviews() {
-  const ids = { S: 'ru-s', C: 'ru-c', T: 'ru-t' }; // Soldat → ru-s, Cavalier → ru-c, Tour → ru-t
+  const ids = { 
+    S: 'ru-s', // Soldat
+    C: 'ru-c', // Cavalier → ru-c
+    T: 'ru-t'  // Tour → ru-t
+  };
 
+  // boucle sur chaque unité
   for (const [unit, id] of Object.entries(ids)) {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = pieceSVG(unit, 1); // Affiche le SVG de l'unité côté J1
+
+    const el = document.getElementById(id); 
+    // récupère l’élément HTML correspondant
+
+    if (el) 
+      el.innerHTML = pieceSVG(unit, 1); 
+      // injecte le SVG de l’unité (joueur 1)
   }
 }
 
-// Attend 100ms que le DOM soit prêt avant d'afficher les previews
+// attend 100ms avant d’exécuter la fonction
+// (le temps que le HTML soit complètement chargé)
 setTimeout(fillRulesPreviews, 100);
