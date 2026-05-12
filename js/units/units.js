@@ -1,6 +1,11 @@
 /* ══════════════════ UNIT DEFINITIONS ══════════════════ */
 const UNITS = {
-  S: { label:'Soldat',   maxStep:1, power:2, killPts:2, short:'S', moveType:'straight' }, // horizontal/vertical 1 case
+  S: { label:'Soldat',   /* `maxStep` is a property of each unit defined in the `UNITS` object. It
+  represents the maximum number of steps that unit can move in a straight
+  line in any direction (horizontal or vertical) on the game board. This
+  property is used in the `getValidMoves` function to determine the range of
+  valid moves for a given unit based on its maximum step value. */
+  maxStep:1, power:2, killPts:2, short:'S', moveType:'straight' }, // horizontal/vertical 1 case
   C: { label:'Cavalier', maxStep:2, power:1, killPts:3, short:'C', moveType:'straight' }, // horizontal/vertical 1-2 cases
   T: { label:'Tank',     maxStep:1, power:3, killPts:5, short:'T', moveType:'straight' }  // horizontal/vertical 1 case
 };

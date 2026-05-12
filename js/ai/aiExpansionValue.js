@@ -24,31 +24,3 @@ function aiExpansionValue(r, c){
 }
 
 
-/* --- liste tous les mouvements possibles d’un joueur --- */
-function aiGetAllMoves(player, pts){
-
-  const moves = []; 
-  // liste de tous les coups possibles
-
-  for(let r=0; r<SIZE; r++)
-    for(let c=0; c<SIZE; c++){
-
-      if(
-        board[r][c].player !== player || // pas le bon joueur
-        !board[r][c].unit                // pas d’unité
-      ) continue;
-
-      // récupère tous les déplacements possibles de cette unité
-      for(const m of getValidMoves(r,c,0)){
-
-        moves.push({
-          r1: r, 
-          c1: c,
-          ...m // destination du move
-        });
-      }
-    }
-
-  return moves; 
-  // retourne tous les coups possibles du joueur
-}

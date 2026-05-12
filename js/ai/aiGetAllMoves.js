@@ -1,4 +1,3 @@
-
 /* --- récupère tous les mouvements possibles d’un joueur --- */
 function aiGetAllMoves(player, pts){
 
@@ -29,29 +28,3 @@ function aiGetAllMoves(player, pts){
 }
 
 
-/* --- calcule le risque dexposition d’une case --- */
-function aiExposureRisk(r, c){
-
-  let risk = 0;
-  // compteur de danger autour de la case
-
-  // directions : droite, gauche, bas, haut
-  for(const [dr, dc] of [[0,1],[0,-1],[1,0],[-1,0]]){
-
-    const nr = r + dr; // nouvelle ligne
-    const nc = c + dc; // nouvelle colonne
-
-    // vérifie que la case existe dans la grille
-    if(
-      nr >= 0 && nr < SIZE &&
-      nc >= 0 && nc < SIZE &&
-      board[nr][nc].player === 1
-    ){
-      risk++;
-      // chaque ennemi adjacent augmente le danger
-    }
-  }
-
-  return risk;
-  // retourne le niveau de risque de la case
-}

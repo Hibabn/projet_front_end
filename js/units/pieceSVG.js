@@ -118,15 +118,17 @@ const UNIT_IMG_P2 = {
 };
 /* ══════════════════ PIECE SVG — PNG FIGURINES ══════════════════ */
 function pieceSVG(unit, player, opts={}) {
-  const cls = `piece-3d p${player} ${unit}-unit${opts.buffed?' buffed':''}`;
+  const cls = `piece-3d p${player} ${unit}-unit${opts.buffed?' buffed':''}`;   // classes CSS de l’unité
   const size = `width:calc(var(--cell) - 4px);height:calc(var(--cell) - 4px)`;
-  const tint1 = 'drop-shadow(0 0 5px #ff4488) drop-shadow(0 0 2px #e8588a)';
+  const tint1 = 'drop-shadow(0 0 5px #ff4488) drop-shadow(0 0 2px #e8588a)';    // glow lumineux joueur 1 (rose)
   const tint2 = 'drop-shadow(0 0 5px #9040ff) drop-shadow(0 0 2px #8040c8)';
-  const tint = player===1 ? tint1 : tint2;
-  const buffGlow = opts.buffed ? ' drop-shadow(0 0 7px gold)' : '';
+  const tint = player===1 ? tint1 : tint2;    
+  const buffGlow = opts.buffed ? ' drop-shadow(0 0 7px gold)' : '';    // glow doré si unité boostée
   const filter = tint + buffGlow;
   const src = player===1 ? UNIT_IMG_P1[unit] : UNIT_IMG_P2[unit];
   return `<img class="${cls}" src="${src}" style="${size};pointer-events:none;object-fit:contain;filter:${filter};display:block"/>`;
+  // retourne la balise image HTML finale
+
 }
 
 /* ══════════════════ FX LAYER INIT ══════════════════ */
